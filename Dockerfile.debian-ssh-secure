@@ -1,0 +1,36 @@
+# Dockerfile.debian-ssh-secure
+FROM debian:latest
+
+# Met à jour les paquets et installe openssh-server, sudo et utilitaires nécessaires
+RUN apt update && apt install -y \
+    openssh-server \
+    sudo \
+    passwd \
+    libpam-modules \
+    && mkdir /var/run/sshd
+
+# Crée un utilisateur non-root avec un mot de passe
+RUN useradd -m -s /bin/bash dockeruser && \
+    usermod --shell /bin/bash dockeruser && \
+    echo "dockeruser:changeme" | chpasswd && \
+    adduser dockeruser sudo
+
+# Active les logs SSH pour debug (facultatif mais utile)
+RUN echo "LogLevel VERBOSE" >> /etc/ssh/sshd_config
+
+# Sécurise SSH : désactive root + autorise dockeruser
+RUN sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin no/' /etc/ssh/sshd_config && \
+    echo 'AllowUsers dockeruser' >> /etc/ssh/sshd_config && \
+    sed -i 's/#PasswordAuthentication yes/PasswordAuthentication yes/' /etc/ssh/sshd_config
+
+# Crée le dossier SSH de l'utilisateur
+RUN mkdir -p /home/dockeruser/.ssh && \
+    chown -R dockeruser:dockeruser /home/dockeruser && \
+    chmod 700 /home/dockeruser/.ssh
+
+# Expose port SSH
+EXPOSE 22
+
+# Reviens en root pour démarrer le service sshd
+USER root
+CMD ["/usr/sbin/sshd", "-D"]

@@ -1,0 +1,11 @@
+# Dockerfile.rocky-ssh
+FROM rockylinux:8
+
+RUN yum install -y openssh-server passwd && \
+    mkdir -p /var/run/sshd && \
+    echo "root:root" | chpasswd && \
+    sed -i 's/#PermitRootLogin yes/PermitRootLogin yes/' /etc/ssh/sshd_config && \
+    systemctl enable sshd
+
+EXPOSE 22
+CMD ["/usr/sbin/sshd", "-D"]
