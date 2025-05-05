@@ -12,7 +12,7 @@
 
     {% if container_ip %}
     <p>Connecte-toi en SSH avec :</p>
-    <pre>ssh dockeruser@{{ container_ip }}</pre>
+    <pre>ssh -p {{ container_ip }} dockeruser@127.0.0.1</pre>
     <p>Mot de passe : <code>changeme</code></p>
     {% endif %}
 </body>
