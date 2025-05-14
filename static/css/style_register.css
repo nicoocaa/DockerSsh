@@ -1,0 +1,161 @@
+html{
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+}
+
+:root {
+    --blue: #2D748D;
+    --blue2: #2C5364;
+    --blue3: #0F2027;
+    --white: white;
+}
+
+::-webkit-scrollbar {
+    display: none;
+}
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    width: 100vw;
+    min-height: 100vh;
+    background: linear-gradient(106deg, var(--blue3) 0%, var(--blue2) 97.63%);
+    background-size: cover;
+    background-repeat: no-repeat;
+    font-family: "Poppins";
+    color: var(--white);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+form {
+    width: 500px;
+    height: 530px;
+    border-radius: 25px;
+    padding: 25px;
+    position: relative;
+    display: flex;
+    gap: 10px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: end;
+    border: 2px solid #FFF;
+    background: rgba(255, 255, 255, 0.00);
+    box-shadow: 0px 0px 20px 10px rgba(255, 255, 255, 0.30);
+}
+
+form h1 {
+    position: absolute;
+    top: 10px;
+    font-weight: 600;
+    font-size: 64px;
+}
+
+form input {
+    width: 450px;
+    height: 90px;
+    border-radius: 25px;
+    padding-left: 25px;
+    border: 2px solid var(--white);
+    color: var(--white);
+    font-size: 24px;
+    background: rgba(255, 255, 255, 0.00);
+}
+
+form label {
+    width: 430px;
+    text-align: left;
+    font-size: 24px;
+    font-weight: 400;
+}
+
+.passwordContainer {
+    width: 450px;
+    height: 136px;
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.passwordContainer svg {
+    width: 33px;
+    height: 33px;
+    fill: var(--white);
+    position: absolute;
+}
+
+.eye {
+    width: 25px;
+    height: 25px;
+    fill: var(--white);
+    display: flex;
+    position: absolute;
+    top: 55%;
+    right: 25px;
+}
+
+.eye.hide {
+    display: none;
+}
+
+.buttonContainer {
+    width: 450px;
+    height: 90px;
+    display: flex;
+    gap: 22px;
+    margin-top: 10px;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.buttonContainer a {
+    width: 100%;
+    height: 100%;
+    border-radius: 25px;
+    border: 2px solid var(--white);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    color: var(--white);
+    font-size: 24px;
+    font-weight: 400;
+}
+
+.buttonContainer button {
+    width: 100%;
+    height: 100%;
+    border-radius: 25px;
+    border: 2px solid var(--white);
+    background: transparent;
+    color: var(--white);
+    font-size: 24px;
+    font-weight: 400;
+}
+
+#checkbox {
+    display: none;
+}
+    
+footer {
+    width: 100vw;
+    height: auto;
+    padding-top: 150px;
+}
+
+footer h3{
+    text-align: center;
+    font-weight: 400;
+    font-size: 15px;
+} 

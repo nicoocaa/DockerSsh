@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Docker SSH Launcher</title>
+</head>
+<body>
+    <h1>Lancer un conteneur SSH</h1>
+
+    <form method="post" action="/">
+        <button type="submit">Lancer le Docker SSH</button>
+    </form>
+
+    {% if container_ip %}
+        <p>Connecte-toi en SSH avec :</p>
+        <pre>ssh -p {{ container_ip }} dockeruser@127.0.0.1</pre>
+        <p>Mot de passe : <code>changeme</code></p>
+
+        <form method="post" action="/stop">
+            <button type="submit">Arrêter le Docker</button>
+        </form>
+    {% endif %}
+</body>
+</html>
+

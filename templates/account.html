@@ -5,22 +5,27 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="icon" type="image/webp" href="src/img/logo.webp" />
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/style_account.css') }}">
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
     </head>
     <body>
         <header>
-            <a href="/login">
+            <a class="loginButton" href="/login">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                     <path d="M15.71,12.71a6,6,0,1,0-7.42,0,10,10,0,0,0-6.22,8.18,1,1,0,0,0,2,.22,8,8,0,0,1,15.9,0,1,1,0,0,0,1,.89h.11a1,1,0,0,0,.88-1.1A10,10,0,0,0,15.71,12.71ZM12,12a4,4,0,1,1,4-4A4,4,0,0,1,12,12Z"></path>
+                </svg>
+            </a>
+            <a class="logoutButton" href="/logout">
+                <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24">
+                    <path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h280v80H200v560h280v80H200Zm440-160-55-58 102-102H360v-80h327L585-622l55-58 200 200-200 200Z"/>
                 </svg>
             </a>
         </header>
         <div class="grp-body">
             <div class="titleContainer">
-                <h1>Docker distribution</h1>
+                <h1>Your Account</h1>
                 <svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 756.26 596.9">
                 <defs>
                     <style>
@@ -33,36 +38,30 @@
                 <path class="cls-1" d="M743.96,245.25c-18.54-12.48-67.26-17.81-102.68-8.27-1.91-35.28-20.1-65.01-53.38-90.95l-12.32-8.27-8.21,12.4c-16.14,24.5-22.94,57.14-20.53,86.81,1.9,18.28,8.26,38.83,20.53,53.74-46.1,26.74-88.59,20.67-276.77,20.67H.06c-.85,42.49,5.98,124.23,57.96,190.77,5.74,7.35,12.04,14.46,18.87,21.31,42.26,42.32,106.11,73.35,201.59,73.44,145.66.13,270.46-78.6,346.37-268.97,24.98.41,90.92,4.48,123.19-57.88.79-1.05,8.21-16.54,8.21-16.54l-12.3-8.27ZM189.67,206.39h-81.7v81.7h81.7v-81.7ZM295.22,206.39h-81.7v81.7h81.7v-81.7ZM400.77,206.39h-81.7v81.7h81.7v-81.7ZM506.32,206.39h-81.7v81.7h81.7v-81.7ZM84.12,206.39H2.42v81.7h81.7v-81.7ZM189.67,103.2h-81.7v81.7h81.7v-81.7ZM295.22,103.2h-81.7v81.7h81.7v-81.7ZM400.77,103.2h-81.7v81.7h81.7v-81.7ZM400.77,0h-81.7v81.7h81.7V0Z"/>
                 </svg>
             </div>
-            <div class="descriptionContainer">
-                <p>
-                    Why waste time installing and configuring Docker images from scratch?<br>
-                    With Docker Distribution, you get ready-to-use containers 🐳 designed to get you up and running in seconds ⚡<br>
-                    Whether you're coding, testing, or deploying — just pull, run, and focus on what matters.<br>
-                    <strong>No configuration. No friction. Just results. ✅</strong><br>
-                    💸 It's <strong>completely free!</strong> Just create an account — <strong>no credit card required.</strong><br>
-                </p>
-            </div>
-            <div class="description2Container">
-                <p>
-                    So why wait? Start building faster, today.
-                </p>
-            </div>
             <div class="examplesContainer">
                 <div class="exampleContainer">
                     <h2>Cyber tools</h2>
-                    <p>The most frequently used cyber tools with the latest versions</p>
+                    <p id="time">59:99</p>
+                    <p class="descriptionDocker">The most frequently used cyber tools with the latest versions</p>
                     <a href="/login">Start</a>
                 </div>
                 <div class="exampleContainer">
                     <h2>Rocky ssh</h2>
-                    <p>Access the latest version of Rocky linux</p>
+                    <p class="descriptionDocker">Access the latest version of Rocky linux</p>
                     <a href="/login">Start</a>
                 </div>
                 <div class="exampleContainer">
-                    <h2>Debian ssh</h2>
-                    <p>Access the latest version of Debian linux</p>
-                    <a href="/login">Start</a>
-                </div>
+    <h2>Debian ssh</h2>
+    <p>Access the latest version of Debian linux</p>
+    {% if session['user_id'] %}
+    <form method="POST" action="/start_container">
+        <button type="submit">Start</button>
+    </form>
+    {% else %}
+    <a href="/login">Start</a>
+    {% endif %}
+</div>
+
             </div>
         </div>
         <footer>
