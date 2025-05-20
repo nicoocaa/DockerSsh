@@ -5,6 +5,8 @@ FROM debian:latest
 RUN apt update && apt install -y \
     openssh-server \
     sudo \
+    nano \
+    git \
     passwd \
     libpam-modules \
     && mkdir /var/run/sshd
@@ -13,10 +15,22 @@ RUN apt update && apt install -y \
 RUN useradd -m -s /bin/bash dockeruser && \
     usermod --shell /bin/bash dockeruser && \
     echo "dockeruser:changeme" | chpasswd && \
-    adduser dockeruser sudo
+    adduser dockeruser sudo && \
+    touch /home/dockeruser/.hushlogin
 
 # Active les logs SSH pour debug (facultatif mais utile)
 RUN echo "LogLevel VERBOSE" >> /etc/ssh/sshd_config
+
+# Active la bannière SSH
+RUN echo "Banner /etc/issue.net" >> /etc/ssh/sshd_config
+
+# Crée un message de bienvenue simple
+RUN echo '#!/bin/bash' > /etc/update-motd.d/99-custom && \
+    echo 'echo "🐧 Bienvenue sur la VM Debian SSH sécurisée"' >> /etc/update-motd.d/99-custom && \
+    echo 'echo "👤 Utilisateur : $(whoami)"' >> /etc/update-motd.d/99-custom && \
+    echo 'echo "🕒 Date       : $(date)"' >> /etc/update-motd.d/99-custom && \
+    echo 'echo "📡 IP interne : $(hostname -I)"' >> /etc/update-motd.d/99-custom && \
+    chmod +x /etc/update-motd.d/99-custom
 
 # Sécurise SSH : désactive root + autorise dockeruser
 RUN sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin no/' /etc/ssh/sshd_config && \
@@ -31,6 +45,6 @@ RUN mkdir -p /home/dockeruser/.ssh && \
 # Expose port SSH
 EXPOSE 22
 
-# Reviens en root pour démarrer le service sshd
-USER root
+# Lance le service SSH
 CMD ["/usr/sbin/sshd", "-D"]
+

@@ -1,11 +1,59 @@
-# Dockerfile.rocky-ssh
-FROM rockylinux:8
+# Dockerfile.rocky-ssh-secure
+FROM rockylinux:9
 
-RUN yum install -y openssh-server passwd && \
-    mkdir -p /var/run/sshd && \
-    echo "root:root" | chpasswd && \
-    sed -i 's/#PermitRootLogin yes/PermitRootLogin yes/' /etc/ssh/sshd_config && \
-    systemctl enable sshd
+# Met à jour les paquets et installe OpenSSH, sudo et utilitaires
+RUN dnf -y update && \
+    dnf -y install \
+    openssh-server \
+    sudo \
+    nano \
+    git \
+    passwd \
+    pam \
+    util-linux \
+    shadow-utils && \
+    dnf clean all
 
+# Crée les dossiers nécessaires
+RUN mkdir /var/run/sshd
+
+# Génère les clés SSH server
+RUN ssh-keygen -A
+
+# Crée un utilisateur non-root avec un mot de passe
+RUN useradd -m -s /bin/bash dockeruser && \
+    echo "dockeruser:changeme" | chpasswd && \
+    usermod -aG wheel dockeruser && \
+    touch /home/dockeruser/.hushlogin
+
+# Active les logs SSH pour debug
+RUN echo "LogLevel VERBOSE" >> /etc/ssh/sshd_config
+
+# Active la bannière SSH
+RUN echo "Banner /etc/issue.net" >> /etc/ssh/sshd_config
+
+# Crée une bannière et un motd simple
+RUN echo "🐧 Bienvenue sur la VM Rocky SSH sécurisée" > /etc/issue.net && \
+    echo -e '#!/bin/bash\n' \
+    'echo "👤 Utilisateur : $(whoami)"\n' \
+    'echo "🕒 Date       : $(date)"\n' \
+    'echo "📡 IP interne : $(hostname -I)"' \
+    > /etc/profile.d/custom_motd.sh && \
+    chmod +x /etc/profile.d/custom_motd.sh
+
+# Sécurise SSH : désactive root + autorise dockeruser
+RUN sed -i 's/^#PermitRootLogin.*/PermitRootLogin no/' /etc/ssh/sshd_config && \
+    echo 'AllowUsers dockeruser' >> /etc/ssh/sshd_config && \
+    sed -i 's/^#PasswordAuthentication.*/PasswordAuthentication yes/' /etc/ssh/sshd_config
+
+# Crée le dossier SSH de l'utilisateur
+RUN mkdir -p /home/dockeruser/.ssh && \
+    chown -R dockeruser:dockeruser /home/dockeruser && \
+    chmod 700 /home/dockeruser/.ssh
+
+# Expose le port SSH
 EXPOSE 22
+
+# Démarre le service SSH
 CMD ["/usr/sbin/sshd", "-D"]
+

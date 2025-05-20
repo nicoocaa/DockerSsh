@@ -4,7 +4,7 @@
         <title>Docker distribution</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="icon" type="image/webp" href="src/img/logo.webp" />
+        <link rel="icon" type="image/svg" href="{{ url_for('static', filename='src/img/logo.svg') }}"/>
         <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -12,7 +12,7 @@
     </head>
     <body>
         <header>
-            <a href="/login">
+            <a href="/profile_redirect">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                     <path d="M15.71,12.71a6,6,0,1,0-7.42,0,10,10,0,0,0-6.22,8.18,1,1,0,0,0,2,.22,8,8,0,0,1,15.9,0,1,1,0,0,0,1,.89h.11a1,1,0,0,0,.88-1.1A10,10,0,0,0,15.71,12.71ZM12,12a4,4,0,1,1,4-4A4,4,0,0,1,12,12Z"></path>
                 </svg>
@@ -51,17 +51,17 @@
                 <div class="exampleContainer">
                     <h2>Cyber tools</h2>
                     <p>The most frequently used cyber tools with the latest versions</p>
-                    <a href="/login">Start</a>
+                    <a href="/profile_redirect">Start</a>
                 </div>
                 <div class="exampleContainer">
                     <h2>Rocky ssh</h2>
                     <p>Access the latest version of Rocky linux</p>
-                    <a href="/login">Start</a>
+                    <a href="/profile_redirect">Start</a>
                 </div>
                 <div class="exampleContainer">
                     <h2>Debian ssh</h2>
                     <p>Access the latest version of Debian linux</p>
-                    <a href="/login">Start</a>
+                    <a href="/profile_redirect">Start</a>
                 </div>
             </div>
         </div>

@@ -117,7 +117,7 @@ header a svg {
     font-size: 18px;
 }
 
-.exampleContainer a{
+.exampleContainer .startButton{
     position: absolute;
     bottom: 25px;
     right: 25px;
@@ -129,6 +129,24 @@ header a svg {
     font-weight: 500;
     font-size: 24px;
     text-decoration: none;
+    border: none;
+    cursor: pointer;
+} 
+
+.exampleContainer .stopButton{
+    position: absolute;
+    bottom: 25px;
+    right: 25px;
+    width: auto;
+    padding: 15px 50px;
+    background-color: var(--blue);
+    border-radius: 15px;
+    color: var(--white);
+    font-weight: 500;
+    font-size: 24px;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
 } 
 
 .exampleContainer:hover {

@@ -1,31 +1,48 @@
 # Dockerfile.cyberlab
 FROM debian:latest
 
-# Met à jour les paquets et installe openssh-server, sudo et utilitaires de base
-RUN apt update && apt install -y curl
-RUN apt update && apt install -y wget
-RUN apt update && apt install -y nmap
-RUN apt update && apt install -y sqlmap
-RUN apt update && apt install -y tcpdump
-RUN apt update && apt install -y netcat-openbsd
-RUN apt update && apt install -y gobuster
-RUN apt update && apt install -y whois
-RUN apt update && apt install -y dig
-RUN apt update && apt install -y dirb
-RUN apt update && apt install -y python3-pip
-RUN apt update && apt install -y apt clean
-
-# Installe Burp Suite Community via snap si besoin ou propose une alternative
-# (snap n'est pas idéal dans Docker, donc ici Burp pas ajouté directement)
+# Installe tous les outils d'un coup + proprement
+RUN apt update && apt install -y \
+    curl \
+    git \
+    wget \
+    hashcat \
+    nano \
+    nmap \
+    sqlmap \
+    tcpdump \
+    netcat-openbsd \
+    gobuster \
+    whois \
+    dnsutils \
+    dirb \
+    python3-pip \
+    openssh-server && \
+    echo "Banner /etc/issue.net" >> /etc/ssh/sshd_config && \
+    apt clean && \
+    rm -rf /var/lib/apt/lists/*
 
 # Crée un utilisateur non-root avec un mot de passe
 RUN useradd -m -s /bin/bash dockeruser && \
     usermod --shell /bin/bash dockeruser && \
     echo "dockeruser:changeme" | chpasswd && \
-    adduser dockeruser sudo
+    adduser dockeruser sudo && \
+    touch /home/dockeruser/.hushlogin
 
 # Active les logs SSH pour debug (facultatif)
 RUN echo "LogLevel VERBOSE" >> /etc/ssh/sshd_config
+
+# Active la bannière SSH
+RUN echo "Banner /etc/issue.net" >> /etc/ssh/sshd_config
+
+# Crée un message de bienvenue simple
+RUN echo '#!/bin/bash' > /etc/update-motd.d/99-custom && \
+    echo 'echo "🐧 Bienvenue sur la VM Debian SSH sécurisée"' >> /etc/update-motd.d/99-custom && \
+    echo 'echo "👤 Utilisateur : $(whoami)"' >> /etc/update-motd.d/99-custom && \
+    echo 'echo "🕒 Date       : $(date)"' >> /etc/update-motd.d/99-custom && \
+    echo 'echo "📡 IP interne : $(hostname -I)"' >> /etc/update-motd.d/99-custom && \
+    chmod +x /etc/update-motd.d/99-custom
+    
 
 # Sécurise SSH : désactive root + autorise dockeruser
 RUN sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin no/' /etc/ssh/sshd_config && \
@@ -37,9 +54,19 @@ RUN mkdir -p /home/dockeruser/.ssh && \
     chown -R dockeruser:dockeruser /home/dockeruser && \
     chmod 700 /home/dockeruser/.ssh
 
-# Expose port SSH
+RUN echo "🐳 Bienvenue sur le Docker CyberLab !" > /etc/issue.net && \
+    echo "💀 Usage strictement réservé aux tests de cybersécurité" >> /etc/issue.net && \
+    echo "👤 Utilisateur : dockeruser" >> /etc/issue.net && \
+    echo "⏰ Date       : \$(date)" >> /etc/issue.net && \
+    echo "📍 IP interne : \$(hostname -I)" >> /etc/issue.net
+    
+# Crée le répertoire nécessaire à sshd
+RUN mkdir /var/run/sshd
+
+# Expose le port SSH
 EXPOSE 22
 
-# Reviens en root pour démarrer le service sshd
-USER root
+# Lance le service SSH
 CMD ["/usr/sbin/sshd", "-D"]
+
+
